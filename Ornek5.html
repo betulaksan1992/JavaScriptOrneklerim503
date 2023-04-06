@@ -74,15 +74,99 @@
             $("#btnEkle").click(function () {
                 var $ad = $("#txtAd");
                 var $soyad = $("#txtSoyad");
-                
+                var $email = $("#txtEmail");
+
                 if ($ad.val() == null || $ad.val().length == 0 ||
-                    $soyad.val() == null || $soyad.val().length == 0) {
-                   alert("Gerekli alanlar girilmelidir!")
+                    $soyad.val() == null || $soyad.val().length == 0 ||
+                    $email.val() == null || $email.val().length == 0) {
+                    alert("Gerekli alanlar girilmelidir!")
+                    return;
+                } // if bitti
+
+                var yeniKullanici = {
+                    ad: $ad.val(),
+                    soyad: $soyad.val(),
+                    email: $email.val()
+                };
+
+                var kullanicidanVarMi = false;
+                //for (var i = 0; i < kullanicilar.length; i++) {
+
+                //    if (kullanicilar[i].email.toLowerCase() == yeniKullanici.email.toLowerCase()) {
+                //        kullanicidanVarMi = true;
+                //        alert("Aynı emailden zaten sistemde kayıtlıdır")
+                //        return;
+                //    }
+                //}
+
+                for (i in kullanicilar) {
+
+                    if (kullanicilar[i].email.toLowerCase() == yeniKullanici.email.toLowerCase()) {
+                        kullanicidanVarMi = true;
+                        alert("Aynı emailden zaten sistemde kayıtlıdır")
+                        return;
+                    }
+                } // for bitti
+                if (!kullanicidanVarMi) {
+                    kullanicilar.push(yeniKullanici);
+                    alert("Yeni kullanıcı eklendi");
+                    //temizlik
+                    $ad.val('');
+                    $soyad.val('');
+                    $email.val('');
+                } // if bitti
+
+                console.log(kullanicilar);
+                KullanicilariGetir();
+            }); // btn ekle bitti
+
+
+
+
+            $("#btnTemizle").click(function () {
+                alert("temizle tıkladı")
+            });
+
+            function KullanicilariGetir() {
+                $("#kisiDiv").html('');
+                var toplam = 0;
+                if (kullanicilar.length == 0) {
+                    return;
                 }
 
+                var tabloHTml = "<table class='table table-hover'>"
+                tabloHTml +=
+                    "<tr><th>İsim</th>" +
+                    "<th>Soyisim</th>" +
+                    "<th>Email</th>" +
+                    "<th>Doğum Tarihi</th>" +
+                    "<th>İşlemler</th></tr>";
+                tabloHTml += "<tbody>";
 
+                for (i in kullanicilar) {
 
-            }); // btn ekle bitti
+                    tabloHTml += "<tr>" +
+                        "<td>" + kullanicilar[i].ad + "</td>" +
+                        "<td>" + kullanicilar[i].soyad + "</td>" +
+                        "<td>" + kullanicilar[i].email + "</td>";
+
+                    if (kullanicilar[i].dogumtrh != null) {
+                        tabloHTml +=
+                            "<td>" + kullanicilar[i].dogumtrh + "</td>";
+                    }
+                    else {
+                        tabloHTml += "<td> ---- </td>";
+                    }
+                    tabloHTml +=
+                        "<td><input type='button' class='btn btn-danger btn-sm' value='SİL' onclick='KullaniciSil(" +
+                        kullanicilar[i].email + ")'/></td>";
+                       
+                    tabloHTml += "</tr>";
+
+                } // for bitti
+                tabloHTml += "</tbody></table>";
+                $("#kisiDiv").html(tabloHTml);
+            } // KullanicilariGetir fonk. bitti
 
 
         }); // document ready bitti
