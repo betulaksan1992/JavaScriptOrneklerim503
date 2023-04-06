@@ -160,7 +160,7 @@
             $(this).keyup(function (e) {
                 console.log("sayfa");
                 console.log(e);
-                if (e.key=="Tab") {
+                if (e.key=="Tab" && e.target.defaultValue=="SİL") {
                     sileTikladi=true;
                 }
 
